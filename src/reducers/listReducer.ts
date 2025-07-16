@@ -2,7 +2,9 @@ import { Item } from "@/types/Item";
 
 type AddAction = {
     type: 'add';
-    payload: {text: string;};
+    payload: {
+        text: string;
+    };
 }
 type EditTextAction = {
     type: 'editText'
@@ -17,7 +19,7 @@ type ToggleDone = {
 }
 type RemoveAction = {
     type: 'remove';
-    payload: {id: number};
+    payload: {id: number}
 }
 type ListActions = AddAction | EditTextAction | ToggleDone | RemoveAction;
 
@@ -36,10 +38,11 @@ export const listReducer = (list: Item[],action: ListActions) => { // recebe a l
                  return t;
             })
         case 'toggleDone':
-            return list.map(i => {
-                if(i.id === action.payload.id) i.done = !i.done;
-                return i;
-            })
+            return list.map(i => 
+            i.id === action.payload.id 
+            ? { ...i, done: !i.done } // cria novo objeto com done invertido
+            : i                      // retorna o objeto inalterado
+            );
         case 'remove':
             return list.filter(i => i.id !== action.payload.id);
         default:
