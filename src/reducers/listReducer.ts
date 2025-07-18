@@ -27,8 +27,9 @@ type ListActions = AddAction | EditTextAction | ToggleDone | RemoveAction;
 export const listReducer = (list: Item[],action: ListActions) => { // recebe a lista depois vai executar alguma ação e depois retorna a lista atualizada
     switch (action.type) {
         case 'add':
-            return [...list, {
-                id: list.length,
+            return [...list, 
+                {
+                id: Date.now(),
                 text: action.payload.text,
                 done: false
             }]

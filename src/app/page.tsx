@@ -1,9 +1,8 @@
 "use client"
 
-import { Square } from "@/components/Square";
-import { VideoPlayer } from "@/components/VideoPlayer";
-import { listReducer } from "@/reducers/listReducer";
-import { Item } from "@/types/Item";
+
+import { Header } from "@/components/Header";
+import { CountContext, CountProvider} from "@/contexts/CountContext";
 import { useEffect, useReducer, useState } from "react";
 
 // Notes
@@ -21,79 +20,19 @@ Quando o componente for desmontado (ou seja, removido da tela). */
 Ela recebe o estado atual e uma ação, e devolve um novo estado.
 É útil quando o estado tem várias partes ou a lógica de atualização é mais complexa.
 */
-
+// A Context API do React serve para compartilhar dados entre componentes sem precisar ficar passando props de pai para filho manualmente
 
 
 const Page = () => {
-    const [list, dispatch] = useReducer (listReducer, [{id:1,text:'Item de teste',done:true}]); // Função a ser executada e estado atual da lista;
-    const [textAdd, setTextAdd] = useState('');
-
-    const addText = () => {
-      if (textAdd.trim() === '') return false;
-      dispatch({
-        type: 'add',
-        payload: {
-          text: textAdd.trim()
-        }
-      })
-    }
-    const removeTask = (id: number) => {
-      if (!window.confirm(`Tem certeza que deseja excluir?`)) return false;
-      dispatch({
-        type: `remove`,
-        payload: {
-          id: id
-        }
-      })
-    }
-    const swictchDone = (id: number) => {
-       dispatch({
-        type: 'toggleDone',
-        payload: { id }
-      })
-    }
-    const handleEdit = (id: number) => {
-      const item = list.find((it) => it.id === id)  
-      if (!item) return false;
-
-      const newText = window.prompt(`Editar tarefa`, item.text);
-      if(!newText || newText?.trim() === ``) return false;
-
-      dispatch ({
-        type: `editText`,
-        payload: {id, newText}
-      })
-      
-    }
     
     return (
       <div className="w-screen h-screen flex flex-col items-center justify-center bg-indigo-950">
-          <div className="bg-indigo-500 p-3 text-center w-full max-w-2xl">
-            <h1 className="text-2xl font-black mb-4">TASKS LIST</h1>
-            {list.map((item) => (
-              <div key={item.id} className="bg-indigo-400 mb-1 rounded-lg text-xl font-semibold p-3 flex items-center justify-between">
-                  <img src='/assets/pen.png'  className="w-4 h-4 hover:opacity-60 hover:scale-125 cursor-pointer" onClick={() => handleEdit(item.id)}/>
-                  <div className="flex items-center">
-                      {item.text} -  
-                      <input type="checkbox" className="w-6 h-6 ml-2" checked={item.done} onChange={() => swictchDone(item.id)}/>
-                  </div>
-                  <img src='/assets/trash.png' className="w-4 h-4 hover:opacity-60 hover:scale-125 cursor-pointer" onClick={() => removeTask(item.id)}/>
 
-              </div>
-            ))}
-          </div>
-          <div className="w-full max-w-md bg-indigo-500 mt-4 text-center">
-              <h2 className="text-xl mb-3 font-bold mt-4">Type a task to add</h2>
-            <form className="flex flex-col items-center" onSubmit={addText}>
-              <label className="flex justify-center">
-                  <input type="text" placeholder="Task name" className="bg-indigo-400 outline-0 w-70 h-10 text-lg p-2 rounded-md" value={textAdd} onChange={(e) => setTextAdd(e.target.value)}/>
-              </label>
-              <label>
-                  <input type="submit" value="Add"  className="py-2 px-3 bg-indigo-800 m-3 rounded-lg text-lg font-semibold hover:opacity-60 cursor-pointer"/>
-              </label>
-            </form>
-            
-          </div>
+      <CountProvider >
+        <Header />
+      </CountProvider>
+       
+          
       </div>
     )
     
