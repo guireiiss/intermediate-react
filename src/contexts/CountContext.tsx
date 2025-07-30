@@ -6,13 +6,13 @@ type CountContextType = {
 }
 export const CountContext = createContext<CountContextType | null >(null);
 
-type Props = {children: ReactNode}
-export const CountProvider = ({children}: Props) => {
-    const [onlineCount, setOnlineCount] = useState(45);
+    type Props = {children: ReactNode}
+    export const CountProvider = ({children}: Props) => {
+        const [onlineCount, setOnlineCount] = useState(45);
 
-    return (
-        <CountContext.Provider value={{onlineCount, setOnlineCount}}>
-            {children}
-        </CountContext.Provider>
-    )
+        return (
+            <CountContext.Provider value={{onlineCount, setOnlineCount}}>
+                {children}
+            </CountContext.Provider>
+        )
 }
